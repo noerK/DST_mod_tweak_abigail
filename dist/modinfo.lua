@@ -1,5 +1,10 @@
 name = "Tweak Abigail [Alpha]"
-description = "Yet another Abigail-tweak mod.\n\n You can rebalance her and she now can be toggled passive/aggressive (Rezecib's Rebalance - https://steamcommunity.com/sharedfiles/filedetails/?id=741879530)"
+description = "Yet another Abigail-tweak mod.\n\n"
+.."Abigail now can be toggled passive/aggressive (Rezecib's Rebalance)\n\n"
+.."Abigail now can be muted\n\n"
+.."You and others won't autoattack her by accident anymore\n\n"
+.."You will be able to adjust her stats\n\n"
+.."You will be able to adjust her and Wendys symbiosis\n\n"
 author = "noerK"
 version = "0.0.1"
 

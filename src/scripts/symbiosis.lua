@@ -12,19 +12,6 @@ local function killAbigail(inst)
     end
 end
 
-AddPrefabPostInit("wendy", function(inst)
-    inst:ListenForEvent("death", killAbigail)
-
-    local old_onDespawn = inst.OnDespawn
-
-    inst.OnDespawn = function()
-        if inst.abigail ~= nil then
-            inst.abigail:RemoveEventCallback("death", influenceWendy)
-        end
-        old_onDespawn()
-    end
-end)
-
 local function influenceWendy(inst)
     -- just because it is possible to spawn abi via console without an wendy assigned to her
     if inst._playerlink ~= nil then
@@ -32,6 +19,19 @@ local function influenceWendy(inst)
         inst._playerlink.components.health:DoDelta(symbiosis_health_delta_on_death)
     end
 end
+
+AddPrefabPostInit("wendy", function(inst)
+    inst:ListenForEvent("death", killAbigail)
+
+    local old_onDespawn = inst.OnDespawn
+
+    inst.OnDespawn = function(inst)
+        if inst.abigail ~= nil then
+            inst.abigail:RemoveEventCallback("death", influenceWendy)
+        end
+        old_onDespawn(inst)
+    end
+end)
 
 AddPrefabPostInit("abigail", function(inst) inst:ListenForEvent("death", influenceWendy) end)
 
