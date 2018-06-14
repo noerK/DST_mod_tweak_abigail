@@ -36,28 +36,28 @@ all_clients_require_mod = true
 configuration_options = {}
 
 local multiplicator_options = {}
-for i=0,30 do 
+for i=0,30 do
 	multiplicator_options[i+1] = {
-		description = "" .. (i*10) .. "%", 
+		description = "" .. (i*10) .. "%",
 		data = ((i*10)/100)
-	} 
+	}
 end
 
 local static_options = {}
-for i=-40,40 do 
+for i=-40,40 do
 	static_options[i+41] = {
-		description = "" .. (i*5) .. "", 
+		description = "" .. (i*5) .. "",
 		data = (i*5)
-	} 
+	}
 end
 
 local boolean_options = {
 	{
-		description = "Yes", 
+		description = "Yes",
 		data = true
 	},
 	{
-		description = "No", 
+		description = "No",
 		data = false
 	},
 }
@@ -114,7 +114,6 @@ addMultiplicatorSetting("tuning:multiplier_dmg_period", "Attack Speed")
 addMultiplicatorSetting("tuning:multiplier_dmg_player_percent", "Player Damage")
 addMultiplicatorSetting("tuning:multiplier_flower_cooldown", "Flower cooldown")
 
-addBooleanSetting("symbiosis:disable_overwriting_code", "Disable overwriting code", false, "Health and sanity loss/gain on summon forced me to overwrite the summoning part of abigail. This could overwrite other mods for abigail. You can disable this part, but the 2 following settings won't work anymore")
 addStaticSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", 50)
 addStaticSetting("symbiosis:health_delta_on_summon", "Health loss/gain on summon", 0)
 
