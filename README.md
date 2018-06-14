@@ -1,6 +1,6 @@
 # DST_tweak_abigail
 
-![alt text](DST_tweak_abigail/src/preview3.jpg "Abigail")
+![abigail.jpg](src/preview3.jpg "Preview Image")
 
 * Damage
 * Sanity
