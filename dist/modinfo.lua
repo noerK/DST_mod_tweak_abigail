@@ -1,20 +1,43 @@
-name = "Tweak Abigail"
+name = "Tweak Abigail [Alpha]"
 description = "Yet another Abigail-tweak mod.\n\n You can rebalance her and she now can be toggled passive/aggressive (Rezecib's Rebalance - https://steamcommunity.com/sharedfiles/filedetails/?id=741879530)"
 author = "noerK"
 version = "0.0.1"
 
 --[[
+[h1][noparse][CAUTION] This is an alpha - so bugs may occur! [CAUTION][/noparse][/h1]
+
 This is yet another abigail mod. Most of hem are just pretty small so i tried to combine the best features.
 Trigger war the annoying fact that you cannot properly farm beeboxes with her..
 
-I took the logic for her active/passive mode from Rezecib's Rebalance - https://steamcommunity.com/sharedfiles/filedetails/?id=741879530.
-It's a huge rebalancing mod of one of the most famous DST-modders. I only took the abigail part of it.
-
 This mod now combines:
- - Abigail can be disengaged/engaged (making her passive) -> (Rezecib's Rebalance)
- - Other Players can not attack her while not in PVP -> (Rezecib's Rebalance)
- - You can rebalance HP, DMG, etc
- - You won't autoattack her
+	- Abigail can be set aggressive/passive -> (Rezecib's Rebalance)
+	- Abigail will have red eyes on aggressive-mode and looks normal on passive mode
+	- You can set a key for the aggressive-mode-toggle
+	- Other Players can not attack her while not in PVP -> (Rezecib's Rebalance)
+	- You won't autoattack her
+	- You can disable abigails howling-loop (other sounds will work)
+	- You can adjust following stats:
+		- Hitpoints
+		- Damage
+		- Player damage
+		- Attackspeed
+		- Movementspeed
+		- Flower cooldown
+	- You can adjust following values regarding wendys and abigails symbiosis:
+		- health loss/gain on summon
+		- sanity loss/gain on summon
+		- health loss/gain on death
+		- sanity loss/gain on death
+		- kill abigail on wendys death
+
+I took the logic for her active/passive mode from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=741879530]Rezecib's Rebalance[/url]
+Idea (not code) for "kill abigail on wendys death" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=353875384]Abigail's Woe[/url]
+Idea (not code) for "You can disable abigails howling-loop (other sounds will work)" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1201377696]Shut up, Abigail.[/url]
+
+[b]Feel free to post be ideas, bugs, etc. :)[/b]
+
+[h1][noparse][CAUTION] This is an alpha - so bugs may occur! [CAUTION][/noparse][/h1]
+
 ]]
 
 icon_atlas = "preview.xml"
@@ -36,28 +59,28 @@ all_clients_require_mod = true
 configuration_options = {}
 
 local multiplicator_options = {}
-for i=0,30 do 
+for i=0,30 do
 	multiplicator_options[i+1] = {
-		description = "" .. (i*10) .. "%", 
+		description = "" .. (i*10) .. "%",
 		data = ((i*10)/100)
-	} 
+	}
 end
 
 local static_options = {}
-for i=-40,40 do 
+for i=-40,40 do
 	static_options[i+41] = {
-		description = "" .. (i*5) .. "", 
+		description = "" .. (i*5) .. "",
 		data = (i*5)
-	} 
+	}
 end
 
 local boolean_options = {
 	{
-		description = "Yes", 
+		description = "Yes",
 		data = true
 	},
 	{
-		description = "No", 
+		description = "No",
 		data = false
 	},
 }
@@ -108,20 +131,29 @@ local function addKeyBindingSetting(name, label, default, hover)
 	}
 end
 
+local function addSettingTitle(title)
+	return {
+		name = title,
+		options = {{description = "", data = 0}},
+		default = 0,
+	}
+end
+
+addSettingTitle("Stats:")
 addMultiplicatorSetting("tuning:multiplier_health", "Hitpoints")
 addMultiplicatorSetting("tuning:multiplier_damage_per_second", "Damage")
-addMultiplicatorSetting("tuning:multiplier_dmg_period", "Attack Speed")
-addMultiplicatorSetting("tuning:multiplier_dmg_player_percent", "Player Damage")
+addMultiplicatorSetting("tuning:multiplier_dmg_period", "Attack speed")
+addMultiplicatorSetting("tuning:multiplier_dmg_player_percent", "Player damage")
+addMultiplicatorSetting("tuning:multiplier_movement_speed", "Movementspeed")
 addMultiplicatorSetting("tuning:multiplier_flower_cooldown", "Flower cooldown")
 
-addBooleanSetting("symbiosis:disable_overwriting_code", "Disable overwriting code", false, "Health and sanity loss/gain on summon forced me to overwrite the summoning part of abigail. This could overwrite other mods for abigail. You can disable this part, but the 2 following settings won't work anymore")
-addStaticSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", 50)
+addSettingTitle("Symbiosis:")
+addStaticSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", -50)
 addStaticSetting("symbiosis:health_delta_on_summon", "Health loss/gain on summon", 0)
-
 addStaticSetting("symbiosis:sanity_delta_on_death", "Sanity loss/gain on death", 0)
 addStaticSetting("symbiosis:health_delta_on_death", "Health loss/gain on death", 0)
 addBooleanSetting("symbiosis:kill_abigail", "Kill Abigail on Wendy's death", false)
 
-addKeyBindingSetting("behaviour:toggle_aggressive_key", "Set the Key to toggle aggressive mode")
-
+addSettingTitle("Brains:")
 addBooleanSetting("mute:howling", "Disable Abigails howling", false)
+addKeyBindingSetting("behaviour:toggle_aggressive_key", "Set the Key to toggle aggressive mode")

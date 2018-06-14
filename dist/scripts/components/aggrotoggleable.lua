@@ -1,6 +1,7 @@
 local AggroToggleable = Class(function(self, inst)
     self.inst = inst
 	self.inst:AddTag("aggro_active")
+	self.inst.AnimState:SetBuild("ghost_abigail_build")
 	--Override these functions to make them check for the tag first
 	if not self.inst.components.combat then return end
 	local _CanTarget = self.inst.components.combat.CanTarget

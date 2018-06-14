@@ -5,4 +5,3 @@ Assets = {
 modimport("scripts/attackfixes.lua")
 modimport("scripts/tuning.lua")
 modimport("scripts/symbiosis.lua")
-modimport("scripts/recall.lua")
