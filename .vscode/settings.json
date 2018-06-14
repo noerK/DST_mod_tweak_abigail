@@ -1,0 +1,7 @@
+{
+    "explorer.confirmDelete": false,
+    "editor.trimAutoWhitespace": true,
+    "editor.detectIndentation": true,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+}
