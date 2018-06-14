@@ -1,7 +1,6 @@
-# DST_tweak_abigail
+# Tweak Abigail - WIP
+### A don't starve together mod
 
 ![abigail.jpg](src/preview3.jpg "Preview Image")
 
-* Damage
-* Sanity
-* Speed
+...TODO
