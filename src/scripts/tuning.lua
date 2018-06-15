@@ -11,9 +11,15 @@ TUNING.ABIGAIL_DMG_PERIOD = TUNING.ABIGAIL_DMG_PERIOD / multiplier_dmg_period
 TUNING.ABIGAIL_DMG_PLAYER_PERCENT = TUNING.ABIGAIL_DMG_PLAYER_PERCENT * multiplier_dmg_player_percent
 TUNING.ABIGAIL_SPEED = TUNING.ABIGAIL_SPEED * multiplier_movement_speed
 
+
 local function overwriteFlowerCooldown(inst)
-    inst.components.cooldown.cooldown_duration = (TUNING.TOTAL_DAY_TIME * (1 + math.random() * 2)) * multiplier_flower_cooldown
-    inst.components.cooldown:StartCharging()
+    if inst ~= nil then
+        if inst.components.cooldown == nil then
+            inst:AddComponent("cooldown")
+        end
+        inst.components.cooldown.cooldown_duration = (TUNING.TOTAL_DAY_TIME * (1 + math.random() * 2)) * multiplier_flower_cooldown
+        inst.components.cooldown:StartCharging()
+    end
 end
 
 AddPrefabPostInit("abigail_flower", overwriteFlowerCooldown)

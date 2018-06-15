@@ -6,7 +6,7 @@ description = "Yet another Abigail-tweak mod.\n\n"
 .."You will be able to adjust her stats\n\n"
 .."You will be able to adjust her and Wendys symbiosis\n\n"
 author = "noerK"
-version = "0.0.1"
+version = "0.0.2"
 
 --[[
 [h1][noparse][CAUTION] This is an alpha - so bugs may occur! [CAUTION][/noparse][/h1]
