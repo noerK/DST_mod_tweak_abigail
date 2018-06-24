@@ -1,4 +1,4 @@
-name = "Tweak Abigail [Alpha]"
+name = "Tweak Abigail"
 description = "Yet another Abigail-tweak mod.\n\n"
 .."Abigail now can be toggled passive/aggressive (Rezecib's Rebalance)\n\n"
 .."Abigail now can be muted\n\n"
@@ -6,11 +6,9 @@ description = "Yet another Abigail-tweak mod.\n\n"
 .."You will be able to adjust her stats\n\n"
 .."You will be able to adjust her and Wendys symbiosis\n\n"
 author = "noerK"
-version = "0.0.2"
+version = "1.0.0b"
 
 --[[
-[h1][noparse][CAUTION] This is an alpha - so bugs may occur! [CAUTION][/noparse][/h1]
-
 This is yet another abigail mod. Most of hem are just pretty small so i tried to combine the best features.
 Trigger war the annoying fact that you cannot properly farm beeboxes with her..
 
@@ -28,6 +26,8 @@ This mod now combines:
 		- Attackspeed
 		- Movementspeed
 		- Flower cooldown
+		- Health regeneration (kishkuma)
+		- Damage reduction/blockrate (kishkuma)
 	- You can adjust following values regarding wendys and abigails symbiosis:
 		- health loss/gain on summon
 		- sanity loss/gain on summon
@@ -41,7 +41,13 @@ Idea (not code) for "You can disable abigails howling-loop (other sounds will wo
 
 [b]Feel free to post be ideas, bugs, etc. :)[/b]
 
-[h1][noparse][CAUTION] This is an alpha - so bugs may occur! [CAUTION][/noparse][/h1]
+Thanks to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1411742977]kishkuma[/url] for contributing!
+
+My other mods:
+[table][tr]
+[td][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1417486338][img]https://imgur.com/mL0XSlI.jpg[/img][/url][/td]
+[td][url=https://steamcommunity.com/sharedfiles/filedetails/?id=1153998909][img]https://imgur.com/ZHWA3S3.jpg[/img][/url][/td]
+[/tr][/table]
 
 ]]
 
@@ -148,9 +154,11 @@ addSettingTitle("Stats:")
 addMultiplicatorSetting("tuning:multiplier_health", "Hitpoints")
 addMultiplicatorSetting("tuning:multiplier_damage_per_second", "Damage")
 addMultiplicatorSetting("tuning:multiplier_dmg_period", "Attack speed")
-addMultiplicatorSetting("tuning:multiplier_dmg_player_percent", "Player damage")
+addMultiplicatorSetting("tuning:multiplier_dmg_block", "damage block")
+addMultiplicatorSetting("tuning:multiplier_dmg_player_block", "Player damage block")
 addMultiplicatorSetting("tuning:multiplier_movement_speed", "Movementspeed")
 addMultiplicatorSetting("tuning:multiplier_flower_cooldown", "Flower cooldown")
+addStaticSetting("tuning:health_regeneration_rate", "Health gained per second", 1)
 
 addSettingTitle("Symbiosis:")
 addStaticSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", -50)
