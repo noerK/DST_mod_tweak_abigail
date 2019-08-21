@@ -1,4 +1,4 @@
-name = "Tweak Abigail"
+name = "!dev-Tweak Abigail"
 description = "Yet another Abigail-tweak mod.\n\n"
 .."Abigail now can be toggled passive/aggressive (Rezecib's Rebalance)\n\n"
 .."Abigail now can be muted\n\n"
@@ -6,7 +6,7 @@ description = "Yet another Abigail-tweak mod.\n\n"
 .."You will be able to adjust her stats\n\n"
 .."You will be able to adjust her and Wendys symbiosis\n\n"
 author = "noerK"
-version = "1.0.4b"
+version = "1.2.0"
 
 --[[
 [h1]Yet another abigail mod.[/h1]
@@ -22,7 +22,6 @@ Trigger was the annoying fact that you cannot properly farm beeboxes with her..
 	[*] Other Players can not attack her while not in PVP -> (Rezecib's Rebalance)
 	[*] You won't autoattack her
 	[*] You can disable abigails howling-loop (other sounds will work)
-	[*] You can adjust following stats:
 [/list]
 
 [b]Adjust stats:[/b]
@@ -31,9 +30,11 @@ Trigger was the annoying fact that you cannot properly farm beeboxes with her..
 	[*] Damage
 	[*]	Player damage
 	[*] Attackspeed
+	[*] Attackrange/Area of effect
 	[*] Movementspeed
 	[*] Flower cooldown
 	[*] Health regeneration -> (kishkuma)
+	[*] Health regeneration on aggressive-mode
 	[*] Damage reduction/blockrate -> (kishkuma)
 [/list]
 
@@ -46,9 +47,10 @@ Trigger was the annoying fact that you cannot properly farm beeboxes with her..
 	[*] kill abigail on wendys death
 [/list]
 
-I took the logic for her active/passive mode from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=741879530]Rezecib's Rebalance[/url]
-Idea (not code) for "kill abigail on wendys death" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=353875384]Abigail's Woe[/url]
-Idea (not code) for "You can disable abigails howling-loop (other sounds will work)" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1201377696]Shut up, Abigail.[/url]
+I took the logic for her aggressive/passive mode from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=741879530]Rezecib's Rebalance[/url]
+Idea for "kill abigail on wendys death" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=353875384]Abigail's Woe[/url]
+Idea for "You can disable abigails howling-loop (other sounds will work)" - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1201377696]Shut up, Abigail.[/url]
+Idea for aggressive-mode reg difference by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1411742977]TafuSeler[/url]
 
 [b]Feel free to post be ideas, bugs, etc. :)[/b]
 
@@ -80,27 +82,74 @@ all_clients_require_mod = true
 
 configuration_options = {}
 
-local multiplicator_options = {}
-for i=0,30 do
-	multiplicator_options[i+1] = {
-		description = "" .. (i*10) .. "%",
-		data = ((i*10)/100)
-	}
+local function applySettings()
+	addSettingTitle("Stats:")
+	addSetting("tuning:multiplier_health", "Hitpoints", "%", "The base health is 600HP", 100, 10, 0, 300, true)
+	addSetting("tuning:multiplier_damage_per_second", "Damage", "%", "The base damage is 10(day), 20(dusk), 40(night)", 100, 10, 0, 300, true)
+	addSetting("tuning:multiplier_aura_dmg_tick", "Attack speed", "%", "The time between attacks is 1 second. On 200% it will be 0.5", 100, 10, 0, 300, true)
+	addSetting("tuning:multiplier_aura_dmg_size", "Attack area of effect/range", "%", "Abigail has an aura attack", 100, 5, 0, 200, true)
+	addSetting("tuning:dmg_to_player", "Player damage", "%", "Damage when attacking a player.", 25, 5, 0, 200, true)
+	addSetting("tuning:multiplier_movement_speed", "Movementspeed", "%", "The base movementspeed is 5", 100, 10, 0, 300, true)
+	addSetting("tuning:health_regeneration_rate", "HP gained per second (passive)", " HP/s", "", 1, 1, -50, 50)
+	addSetting("tuning:aggro_health_regeneration_rate", "HP gained per second (aggressive)", " HP/s", "", 1, 1, -50, 50)
+	addSetting("tuning:dmg_block_rate", "Damage block rate", "%", "Abigail has no armor by default. Now you can give her some.", 0, 5, 0, 100, true)
+
+	addSetting("tuning:multiplier_flower_cooldown", "Flower cooldown", "%", "Original cooldown is 3-4 days. 0% is no cooldown at all", 100, 10, 0, 300, true)
+
+	addSettingTitle("Symbiosis:")
+	addSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", "", "", -50, 5, -200, 200)
+	addSetting("symbiosis:health_delta_on_summon", "Health loss/gain on summon", "", "", 0, 5)
+	addSetting("symbiosis:sanity_delta_on_death", "Sanity loss/gain on death", "", "", 0, 5)
+	addSetting("symbiosis:health_delta_on_death", "Health loss/gain on death", "", "", 0, 5)
+	addBooleanSetting("symbiosis:kill_abigail", "Kill Abigail on Wendy's death", false)
+
+	addSettingTitle("Brains:")
+	addBooleanSetting("mute:howling", "Disable Abigails howling", false)
+	addKeyBindingSetting("behaviour:toggle_aggressive_key", "Set the Key to toggle aggressive mode")
+	addBooleanSetting("visual:custom_aggressive_skin", "Enable red eyes (custom skin)", true, "Enables the custom skin with red eyes for her aggressive mode.")
 end
 
-local small_static_options = {}
-for i=-40,40 do
-	small_static_options[i+41] = {
-		description = "" .. (i) .. "",
-		data = (i)
-	}
-end
 
-local static_options = {}
-for i=-40,40 do
-	static_options[i+41] = {
-		description = "" .. (i*5) .. "",
-		data = (i*5)
+-- ###################
+-- Settings Functions
+-- ###################
+
+local function addSetting(name, label, valueType, hover, default, stepParam, minValue, maxValue, m)
+	local new_options = {}
+	local min = minValue or -200
+	local max = maxValue or 200
+	local type = valueType or ""
+	local step = stepParam or 10
+
+
+	local minInt = 0
+	if min < 0 then
+		minInt = -1 * (min / step)
+	end
+
+	local maxInt = max / step
+
+	local percentualize = 1
+
+	if m then
+		percentualize = 100
+	end
+
+	local calculatedDefault = (default or 0) / percentualize
+
+	for i = -1 * minInt, maxInt do
+		new_options[i + minInt + 1] = {
+			description = "" .. (i * step) .. type .. "",
+			data = (i * step) / percentualize
+		}
+	end
+
+	configuration_options[#configuration_options + 1] = {
+		name = name,
+		label = label,
+		options = new_options,
+		default = calculatedDefault,
+		hover = hover or nil
 	}
 end
 
@@ -115,62 +164,6 @@ local boolean_options = {
 	},
 }
 
-local alphabet = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
-local key_options = {}
-for i=1,#alphabet do
-	key_options[i] = {description = alphabet[i], data = 96 + i}
-end
-
-local function addMultiplicatorSetting(name, label, default, hover)
-	configuration_options[#configuration_options + 1] = {
-		name = name,
-		label = label,
-		options = multiplicator_options,
-		default = default or 1,
-		hover = hover or nil
-	}
-end
-
-local function addStaticSetting(name, label, hover, default, step, minValue, maxValue)
-	local static_options = {}
-
-	local min = minValue or -200
-	local max = maxValue or 200
-
-	local minInt = 0
-	local
-	if min < 0 then
-		minInt = -1 * (min / step)
-		loc
-	end
-
-	local maxInt = max / step
-
-	for i = -minInt, maxInt do
-		static_options[i + minInt + 1] = {
-			description = "" .. (i * (step or 5)) .. "",
-			data = i * (step or 5)
-		}
-	end
-	configuration_options[#configuration_options + 1] = {
-		name = name,
-		label = label,
-		options = static_options,
-		default = default or 0,
-		hover = hover or nil
-	}
-end
-
-local function addSmallStaticSetting(name, label, default, hover)
-	configuration_options[#configuration_options + 1] = {
-		name = name,
-		label = label,
-		options = small_static_options,
-		default = default or 0,
-		hover = hover or nil
-	}
-end
-
 local function addBooleanSetting(name, label, default, hover)
 	configuration_options[#configuration_options + 1] = {
 		name = name,
@@ -179,6 +172,12 @@ local function addBooleanSetting(name, label, default, hover)
 		default = default or true,
 		hover = hover or nil
 	}
+end
+
+local alphabet = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"}
+local key_options = {}
+for i=1,#alphabet do
+	key_options[i] = {description = alphabet[i], data = 96 + i}
 end
 
 local function addKeyBindingSetting(name, label, default, hover)
@@ -199,24 +198,4 @@ local function addSettingTitle(title)
 	}
 end
 
-addSettingTitle("Stats:")
-addMultiplicatorSetting("tuning:multiplier_health", "Hitpoints", 1, "The base health is 600HP")
-addMultiplicatorSetting("tuning:multiplier_damage_per_second", "Damage", 1, "The base damage is 10(day), 20(dusk), 40(night)")
-addMultiplicatorSetting("tuning:multiplier_dmg_period", "Attack speed", 1, "The time between attacks is 4")
---addMultiplicatorSetting("tuning:multiplier_dmg_to_player", "Player damage", 1, "Damage when attacking a player.")
-addMultiplicatorSetting("tuning:multiplier_movement_speed", "Movementspeed", 1, "The base movementspeed is 5")
-addSmallStaticSetting("tuning:health_regeneration_rate", "Health gained per second", 1)
-addMultiplicatorSetting("tuning:dmg_block_rate", "Damage block rate", 0, "Abigail has no armor by default. Now you can give her some.")
-
-addMultiplicatorSetting("tuning:multiplier_flower_cooldown", "Flower cooldown")
-
-addSettingTitle("Symbiosis:")
-addStaticSetting("symbiosis:sanity_delta_on_summon", "Sanity loss/gain on summon", "", -50, 5, -200, 200)
-addStaticSetting("symbiosis:health_delta_on_summon", "Health loss/gain on summon", "", 0)
-addStaticSetting("symbiosis:sanity_delta_on_death", "Sanity loss/gain on death", "", 0, 5)
-addStaticSetting("symbiosis:health_delta_on_death", "Health loss/gain on death", "", 0)
-addBooleanSetting("symbiosis:kill_abigail", "Kill Abigail on Wendy's death", false)
-
-addSettingTitle("Brains:")
-addBooleanSetting("mute:howling", "Disable Abigails howling", false)
-addKeyBindingSetting("behaviour:toggle_aggressive_key", "Set the Key to toggle aggressive mode")
+appySettings()

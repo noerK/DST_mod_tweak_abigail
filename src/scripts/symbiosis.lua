@@ -1,4 +1,4 @@
-local symbiosis_kill_abigail = GetModConfigData("symbiosis:kill_abigail")
+local symbiosis_kill_wendy = GetModConfigData("symbiosis:kill_wendy")
 local symbiosis_health_delta_on_death = GetModConfigData("symbiosis:health_delta_on_death")
 local symbiosis_sanity_delta_on_death = GetModConfigData("symbiosis:sanity_delta_on_death")
 local symbiosis_health_delta_on_summon = GetModConfigData("symbiosis:health_delta_on_summon")
@@ -17,6 +17,9 @@ local function influenceWendy(inst)
     if inst._playerlink ~= nil then
         inst._playerlink.components.sanity:DoDelta(symbiosis_sanity_delta_on_death)
         inst._playerlink.components.health:DoDelta(symbiosis_health_delta_on_death)
+        if symbiosis_kill_wendy == true then
+            inst._playerlink.components.health:Kill()
+        end
     end
 end
 

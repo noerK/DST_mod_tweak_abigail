@@ -1,7 +1,10 @@
 local AggroToggleable = Class(function(self, inst)
-    self.inst = inst
-	self.inst:AddTag("aggro_active")
-	self.inst.AnimState:SetBuild("ghost_abigail_aggro")
+	self.inst = inst
+	self.health_regeneration_rate = 0
+	self.health_regeneration_rate_aggressive = 0
+	self.use_custom_skin = false
+
+	self:SetAggressive()
 	--Override these functions to make them check for the tag first
 	if not self.inst.components.combat then return end
 	local _CanTarget = self.inst.components.combat.CanTarget
@@ -38,13 +41,42 @@ nil,
 {
 })
 
+function AggroToggleable:SetAggressive()
+	self.inst:AddTag("aggro_active")
+	if self.inst._playerlink ~= nil then
+		self.inst._playerlink.components.talker:Say("Fight for me")
+	end
+	self.inst.components.health:StartRegen(self.health_regeneration_rate_aggressive, 1, true)
+	if self.use_custom_skin then
+		self.inst.AnimState:SetBuild("ghost_abigail_aggro")
+	end
+end
+
+function AggroToggleable:SetPassive()
+	self.inst:RemoveTag("aggro_active")
+	if self.inst._playerlink ~= nil then
+		self.inst._playerlink.components.talker:Say("Stay calm")
+	end
+	self.inst.components.health:StartRegen(self.health_regeneration_rate, 1, true)
+	if self.use_custom_skin then
+		self.inst.AnimState:SetBuild("ghost_abigail_build")
+	end
+end
+
 function AggroToggleable:Toggle()
 	if self.inst:HasTag("aggro_active") then
-		self.inst:RemoveTag("aggro_active")
-		self.inst.AnimState:SetBuild("ghost_abigail_build")
+		self:SetPassive()
 	else
-		self.inst:AddTag("aggro_active")
-		self.inst.AnimState:SetBuild("ghost_abigail_aggro")
+		self:SetAggressive()
+	end
+end
+
+function AggroToggleable:SetUseCustomSkin(value)
+	self.use_custom_skin = value
+	if self.inst:HasTag("aggro_active") then
+		self:SetAggressive()
+	else
+		self:SetPassive()
 	end
 end
 
@@ -54,10 +86,9 @@ end
 
 function AggroToggleable:OnLoad(data)
 	if data.active == false then
-		self.inst:RemoveTag("aggro_active")
-		self.inst.AnimState:SetBuild("ghost_abigail_build")
+		self:SetPassive()
 	else
-		self.inst.AnimState:SetBuild("ghost_abigail_aggro")
+		self:SetAggressive()
 	end
 end
 
